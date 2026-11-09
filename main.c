@@ -79,11 +79,19 @@ int main (int argc, char *argv[])
 	float temperatura;
 	
 	//TODO: nodo xyz = null
+	nodo_anterior = NULL;
+	cabecera = NULL;
+
 	do{
 		n = fscanf(fp,"%hd\t%hd\t%hd\t%f",&mes,&dia,&hora,&temperatura);
 		
 		if(n == 4){
-			nodo_actual = NULL; //(nodo_t *) malloc(sizeof(nodo_t));
+			nodo_actual = (nodo_t *) malloc(sizeof(nodo_t));
+			if (nodo_actual == NULL) {
+    				fprintf(stderr, "Error: memoria insuficiente\n");
+    				fclose(fp);
+    				return 1;
+			}
 			nodo_actual->mes = mes;
 			nodo_actual->dia = dia;
 			nodo_actual->hora = hora;
@@ -91,11 +99,17 @@ int main (int argc, char *argv[])
 			nodo_actual->siguiente = nodo_anterior;
 			cabecera = nodo_actual;
 			//TODO: nodo xyz = nodo abc
+			nodo_anterior = nodo_actual;
 		}
 		//TODO: else if 0 fprintf/return1
+		else if (n == 0) {
+                        fprintf(stderr, "Error al leer %s\n", nombre_archivo);
+                        fclose(fp);
+                        return 1;
+                }
 
 	}while(n > 0);
-
+	fclose(fp);
 	recorrer_lista(cabecera);
 }
 
